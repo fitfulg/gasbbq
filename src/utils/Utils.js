@@ -1,4 +1,4 @@
-const ColorUtils = {
+const COLORS = {
     darkGray: () => '#4d4d4d',
     lightGray: () => '#d9d9d9',
     white: () => '#ffffff',
@@ -16,4 +16,4 @@ const HEADERS_CONFIG = [
     'D-counter (no editar)'
 ];
 
-module.exports = { ColorUtils, HEADERS_CONFIG };
+module.exports = { COLORS, HEADERS_CONFIG };

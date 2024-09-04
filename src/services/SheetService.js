@@ -19,7 +19,7 @@ class SheetService {
                 .setFontWeight('bold')
                 .setBorder(true, true, true, true, true, true);
         });
-        this.sheet.getRange('A1:E1').setFontColor(ColorUtils.white());
+        this.sheet.getRange('A1:E1').setFontColor(COLORS.white());
     }
 
     setColumnWidths() {
@@ -35,11 +35,11 @@ class SheetService {
     }
 
     applyBackgroundColors() {
-        this.sheet.getRange('A1:E1').setBackground(ColorUtils.darkGray());
-        this.sheet.getRange('F1:G1').setBackground(ColorUtils.white()).setFontColor(ColorUtils.lightGray());
-        this.sheet.getRange('A2:A45').setBackground(ColorUtils.lightGray());
-        this.sheet.getRange('C2:C45').setBackground(ColorUtils.lightYellow());
-        this.sheet.getRange('D2:D45').setBackground(ColorUtils.lightBlue());
+        this.sheet.getRange('A1:E1').setBackground(COLORS.darkGray());
+        this.sheet.getRange('F1:G1').setBackground(COLORS.white()).setFontColor(COLORS.lightGray());
+        this.sheet.getRange('A2:A45').setBackground(COLORS.lightGray());
+        this.sheet.getRange('C2:C45').setBackground(COLORS.lightYellow());
+        this.sheet.getRange('D2:D45').setBackground(COLORS.lightBlue());
     }
 }
 module.exports = { SheetService };
