@@ -1,13 +1,16 @@
 class EventController {
     constructor(sheet) {
+        Logger.log('EventController constructor called');
         this.sheetController = new SheetController(sheet);
     }
 
     onOpen() {
+        Logger.log('onOpen called');
         this.sheetController.setupSheet();
     }
 
     onEdit(e) {
+        Logger.log('onEdit called');
         const range = e.range;
         const sheet = e.source.getActiveSheet();
 

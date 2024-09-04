@@ -1,9 +1,11 @@
 class WordCountService {
     constructor(sheet) {
+        Logger.log('WordCountService constructor called');
         this.sheet = sheet;
     }
 
     countWords(sourceColumn, targetColumn) {
+        Logger.log('countWords called with sourceColumn: ' + sourceColumn + ', targetColumn: ' + targetColumn);
         const dataRange = this.sheet.getRange(`${sourceColumn}2:${sourceColumn}45`);
         const dataValues = dataRange.getValues().flat();
 

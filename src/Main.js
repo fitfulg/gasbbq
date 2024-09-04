@@ -1,10 +1,12 @@
 function onOpen() {
+    Logger.log('onOpen called');
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     const eventController = new EventController(sheet);
     eventController.onOpen();
 }
 
 function onEdit(e) {
+    Logger.log('onEdit called');
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     const eventController = new EventController(sheet);
     eventController.onEdit(e);

@@ -1,5 +1,6 @@
 class SheetController {
     constructor(sheet) {
+        Logger.log('SheetController constructor called');
         this.sheetService = new SheetService(sheet);
         this.validationService = new ValidationService(sheet);
         this.protectionService = new ProtectionService(sheet);
@@ -7,6 +8,7 @@ class SheetController {
     }
 
     setupSheet() {
+        Logger.log('setupSheet called');
         this.sheetService.ensureRowCount(45);
         this.sheetService.setupHeaders();
         this.sheetService.setColumnWidths();

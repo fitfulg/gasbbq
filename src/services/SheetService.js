@@ -1,9 +1,11 @@
 class SheetService {
     constructor(sheet) {
+        Logger.log('SheetService constructor called');
         this.sheet = sheet;
     }
 
     ensureRowCount(count) {
+        Logger.log('ensureRowCount called with count: ' + count);
         const currentRows = this.sheet.getMaxRows();
         if (currentRows > count) {
             this.sheet.deleteRows(count + 1, currentRows - count);
@@ -13,6 +15,7 @@ class SheetService {
     }
 
     setupHeaders() {
+        Logger.log('setupHeaders called');
         for (const config of COLUMN_CONFIG) {
             const columnIndex = this.sheet.getRange(config.column + '1').getColumn();
             this.sheet.getRange(1, columnIndex)
@@ -24,6 +27,7 @@ class SheetService {
     }
 
     setColumnWidths() {
+        Logger.log('setColumnWidths called');
         for (const config of COLUMN_CONFIG) {
             const columnIndex = this.sheet.getRange(config.column + '1').getColumn();
             this.sheet.setColumnWidth(columnIndex, config.width);
@@ -31,6 +35,7 @@ class SheetService {
     }
 
     applyFormatting() {
+        Logger.log('applyFormatting called');
         this.sheet.getRange('B1:G45').setWrap(true)
             .setHorizontalAlignment("center")
             .setVerticalAlignment("middle");
@@ -40,6 +45,7 @@ class SheetService {
     }
 
     applyBackgroundColors() {
+        Logger.log('applyBackgroundColors called');
         this.sheet.getRange('A1:E1').setBackground(COLORS.darkGray());
         this.sheet.getRange('F1:G1').setBackground(COLORS.white()).setFontColor(COLORS.lightGray());
         this.sheet.getRange('A2:A45').setBackground(COLORS.lightGray());
@@ -48,6 +54,7 @@ class SheetService {
     }
 
     applyTextColorToRange(range, color) {
+        Logger.log('applyTextColorToRange called with range: ' + range + ', color: ' + color);
         this.sheet.getRange(range).setFontColor(color);
     }
 }
