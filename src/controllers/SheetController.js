@@ -13,6 +13,8 @@ class SheetController {
         this.sheetService.applyFormatting();
         this.sheetService.applyBackgroundColors();
 
+        this.sheetService.applyTextColorToRange('F2:G45', COLORS.lightGray());
+
         this.validationService.applyConfirmationValidation();
         this.protectionService.protectColumns(['F2:F45', 'G2:G45']);
 
