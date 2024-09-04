@@ -1,18 +1,22 @@
 // Models
 class SheetModel {
     constructor(sheet) {
+        Logger.log('SheetModel constructor called');
         this.sheet = sheet;
     }
 
     getSheet() {
+        Logger.log('getSheet called');
         return this.sheet;
     }
 
     getRange(range) {
+        Logger.log('getRange called with range: ' + range);
         return this.sheet.getRange(range);
     }
 
     setHeaders(headers) {
+        Logger.log('setHeaders called');
         headers.forEach((header, index) => {
             this.sheet.getRange(1, index + 1)
                 .setValue(header)
@@ -22,6 +26,7 @@ class SheetModel {
     }
 
     setColumnWidths(columnWidths) {
+        Logger.log('setColumnWidths called');
         columnWidths.forEach((width, index) => {
             this.sheet.setColumnWidth(index + 1, width);
         });
@@ -32,6 +37,7 @@ class SheetModel {
 // Controllers
 class SheetController {
     constructor(sheet) {
+        Logger.log('SheetController constructor called');
         this.sheetService = new SheetService(sheet);
         this.validationService = new ValidationService(sheet);
         this.protectionService = new ProtectionService(sheet);
@@ -39,6 +45,7 @@ class SheetController {
     }
 
     setupSheet() {
+        Logger.log('setupSheet called');
         this.sheetService.ensureRowCount(45);
         this.sheetService.setupHeaders();
         this.sheetService.setColumnWidths();
@@ -58,14 +65,17 @@ class SheetController {
 
 class EventController {
     constructor(sheet) {
+        Logger.log('EventController constructor called');
         this.sheetController = new SheetController(sheet);
     }
 
     onOpen() {
+        Logger.log('onOpen called');
         this.sheetController.setupSheet();
     }
 
     onEdit(e) {
+        Logger.log('onEdit called');
         const range = e.range;
         const sheet = e.source.getActiveSheet();
 
@@ -85,10 +95,12 @@ class EventController {
 // Services
 class SheetService {
     constructor(sheet) {
+        Logger.log('SheetService constructor called');
         this.sheet = sheet;
     }
 
     ensureRowCount(count) {
+        Logger.log('ensureRowCount called with count: ' + count);
         const currentRows = this.sheet.getMaxRows();
         if (currentRows > count) {
             this.sheet.deleteRows(count + 1, currentRows - count);
@@ -98,6 +110,7 @@ class SheetService {
     }
 
     setupHeaders() {
+        Logger.log('setupHeaders called');
         for (const config of COLUMN_CONFIG) {
             const columnIndex = this.sheet.getRange(config.column + '1').getColumn();
             this.sheet.getRange(1, columnIndex)
@@ -109,6 +122,7 @@ class SheetService {
     }
 
     setColumnWidths() {
+        Logger.log('setColumnWidths called');
         for (const config of COLUMN_CONFIG) {
             const columnIndex = this.sheet.getRange(config.column + '1').getColumn();
             this.sheet.setColumnWidth(columnIndex, config.width);
@@ -116,6 +130,7 @@ class SheetService {
     }
 
     applyFormatting() {
+        Logger.log('applyFormatting called');
         this.sheet.getRange('B1:G45').setWrap(true)
             .setHorizontalAlignment("center")
             .setVerticalAlignment("middle");
@@ -125,6 +140,7 @@ class SheetService {
     }
 
     applyBackgroundColors() {
+        Logger.log('applyBackgroundColors called');
         this.sheet.getRange('A1:E1').setBackground(COLORS.darkGray());
         this.sheet.getRange('F1:G1').setBackground(COLORS.white()).setFontColor(COLORS.lightGray());
         this.sheet.getRange('A2:A45').setBackground(COLORS.lightGray());
@@ -133,6 +149,7 @@ class SheetService {
     }
 
     applyTextColorToRange(range, color) {
+        Logger.log('applyTextColorToRange called with range: ' + range + ', color: ' + color);
         this.sheet.getRange(range).setFontColor(color);
     }
 }
@@ -141,10 +158,12 @@ class SheetService {
 
 class ValidationService {
     constructor(sheet) {
+        Logger.log('ValidationService constructor called');
         this.sheet = sheet;
     }
 
     applyConfirmationValidation() {
+        Logger.log('applyConfirmationValidation called');
         const confirmRange = this.sheet.getRange('B2:B45');
         const rule = SpreadsheetApp.newDataValidation().requireValueInList(['Sí', 'No'], true).build();
         confirmRange.setDataValidation(rule);
@@ -155,10 +174,12 @@ class ValidationService {
 
 class ProtectionService {
     constructor(sheet) {
+        Logger.log('ProtectionService constructor called');
         this.sheet = sheet;
     }
 
     protectColumns(ranges) {
+        Logger.log('protectColumns called with ranges: ' + ranges);
         ranges.forEach(range => {
             const protection = this.sheet.getRange(range).protect();
             protection.setDescription('Automatic count protection');
@@ -173,10 +194,12 @@ class ProtectionService {
 
 class WordCountService {
     constructor(sheet) {
+        Logger.log('WordCountService constructor called');
         this.sheet = sheet;
     }
 
     countWords(sourceColumn, targetColumn) {
+        Logger.log('countWords called with sourceColumn: ' + sourceColumn + ', targetColumn: ' + targetColumn);
         const dataRange = this.sheet.getRange(`${sourceColumn}2:${sourceColumn}45`);
         const dataValues = dataRange.getValues().flat();
 
@@ -224,12 +247,14 @@ const COLUMN_CONFIG = [
 
 // Main Script
 function onOpen() {
+    Logger.log('onOpen called');
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     const eventController = new EventController(sheet);
     eventController.onOpen();
 }
 
 function onEdit(e) {
+    Logger.log('onEdit called');
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     const eventController = new EventController(sheet);
     eventController.onEdit(e);
