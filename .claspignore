@@ -16,10 +16,10 @@ tests/**/.*/**
 tests/**/.*
 tests/
 jest.config.js
+jest.setup.js
 package.json
 package-lock.json
 eslint.config.cjs
-jest.config.cjs
 
 # Ignorar archivos y directorios específicos de configuración del proyecto
 .DS_Store

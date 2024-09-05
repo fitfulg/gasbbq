@@ -17,7 +17,6 @@ append_with_newline() {
 }
 
 echo "// Models" >> "$output_file"
-append_with_newline "$src_dir/models/SheetModel.js"
 
 echo "// Controllers" >> "$output_file"
 append_with_newline "$src_dir/controllers/SheetController.js"

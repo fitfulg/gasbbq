@@ -1,6 +1,4 @@
 // Models
-
-
 // Controllers
 class SheetController {
     constructor(sheet) {
