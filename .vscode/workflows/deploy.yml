@@ -1,0 +1,58 @@
+name: Deploy Google Apps Script
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  setup-clasp:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the repository
+    - uses: actions/checkout@v4
+
+    # Set up Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    # Install project dependencies
+    - name: Install dependencies
+      run: npm ci
+
+    # Install clasp globally
+    - name: Install clasp
+      run: npm install -g @google/clasp
+
+    # Set up .clasprc.json with the secret token
+    - name: Set up .clasprc.json
+      run: |
+        echo '{
+          "token": {
+            "access_token": "${{ secrets.CLASP_TOKEN }}",
+            "refresh_token": "${{ secrets.CLASP_REFRESH_TOKEN }}",
+            "scope": "https://www.googleapis.com/auth/script.deployments https://www.googleapis.com/auth/script.projects https://www.googleapis.com/auth/script.webapp.deploy https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/service.management https://www.googleapis.com/auth/logging.read https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/cloud-platform",
+            "token_type": "Bearer",
+            "expiry_date": 1725518520696
+          }
+        }' > ~/.clasprc.json
+
+    # Create .clasp.json file with scriptId
+    - name: Create .clasp.json
+      run: |
+        echo '{
+          "scriptId": "'${{ secrets.CLASP_SCRIPT_ID }}'",
+          "rootDir": "./"
+        }' > .clasp.json
+
+    # Verify that the .claspignore file exists (optional)
+    - name: Verify .claspignore
+      run: |
+        cat .claspignore || echo ".claspignore file not found"
+
+    # Push the code to Google Apps Script
+    - name: Push to Google Apps Script
+      run: clasp push

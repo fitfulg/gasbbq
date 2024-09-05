@@ -1,0 +1,26 @@
+# Ignorar archivos generados automáticamente
+concat-script.js
+
+# Ignorar dependencias de Node.js
+node_modules/**
+node_modules/**/.*/**
+node_modules/**/.*
+
+# Ignorar archivos y directorios de configuración del entorno de desarrollo.
+.clasprc.json.
+.husky/
+.vscode/
+.git/
+tests/**
+tests/**/.*/**
+tests/**/.*
+tests/
+jest.config.js
+package.json
+package-lock.json
+eslint.config.cjs
+jest.config.cjs
+
+# Ignorar archivos y directorios específicos de configuración del proyecto
+.DS_Store
+Thumbs.db
