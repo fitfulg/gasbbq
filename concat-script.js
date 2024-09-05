@@ -215,7 +215,6 @@ const COLUMN_CONFIG = [
 // Main Script
 function onOpen() {
     Logger.log('onOpen called');
-    Logger.log('HELLO WORLD');
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     const eventController = new EventController(sheet);
     eventController.onOpen();
