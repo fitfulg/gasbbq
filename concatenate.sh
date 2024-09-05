@@ -16,15 +16,13 @@ append_with_newline() {
   echo -e "\n" >> "$output_file"  # Adds an extra newline after each file
 }
 
-echo "// Models" >> "$output_file"
-
 echo "// Controllers" >> "$output_file"
 append_with_newline "$src_dir/controllers/SheetController.js"
 append_with_newline "$src_dir/controllers/EventController.js"
 
 echo "// Services" >> "$output_file"
 append_with_newline "$src_dir/services/SheetService.js"
-append_with_newline "$src_dir/services/ValidationService.js"
+append_with_newline "$src_dir/services/DropdownService.js"
 append_with_newline "$src_dir/services/ProtectionService.js"
 append_with_newline "$src_dir/services/WordCountService.js"
 

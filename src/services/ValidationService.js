@@ -1,6 +1,6 @@
-class ValidationService {
+class DropdownService {
     constructor(sheet) {
-        Logger.log('ValidationService constructor called');
+        Logger.log('DropdownService  constructor called');
         this.sheet = sheet;
     }
 
@@ -12,4 +12,4 @@ class ValidationService {
         this.sheet.getRange('B2:B45').setBorder(true, true, true, true, true, true);
     }
 }
-// module.exports = { ValidationService };
+// module.exports = { DropdownService  };

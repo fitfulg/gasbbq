@@ -2,7 +2,7 @@ class SheetController {
     constructor(sheet) {
         Logger.log('SheetController constructor called');
         this.sheetService = new SheetService(sheet);
-        this.validationService = new ValidationService(sheet);
+        this.dropdownService = new DropdownService(sheet);
         this.protectionService = new ProtectionService(sheet);
         this.wordCountService = new WordCountService(sheet);
     }
@@ -17,7 +17,7 @@ class SheetController {
         this.sheetService.applyTextColorToRange('A1:E1', COLORS.white());
         this.sheetService.applyTextColorToRange('F2:G45', COLORS.lightGray());
 
-        this.validationService.applyConfirmationValidation();
+        this.dropdownService.applyConfirmationValidation();
 
         this.protectionService.protectColumns(['F2:F45', 'G2:G45']);
 
