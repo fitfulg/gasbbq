@@ -14,10 +14,11 @@ class SheetController {
         this.sheetService.setColumnWidths();
         this.sheetService.applyFormatting();
         this.sheetService.applyBackgroundColors();
-
+        this.sheetService.applyTextColorToRange('A1:E1', COLORS.white());
         this.sheetService.applyTextColorToRange('F2:G45', COLORS.lightGray());
 
         this.validationService.applyConfirmationValidation();
+
         this.protectionService.protectColumns(['F2:F45', 'G2:G45']);
 
         this.wordCountService.countWords('C', 'F');

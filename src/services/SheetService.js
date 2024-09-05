@@ -23,7 +23,6 @@ class SheetService {
                 .setFontWeight('bold')
                 .setBorder(true, true, true, true, true, true);
         }
-        this.sheet.getRange('A1:E1').setFontColor(COLORS.white());
     }
 
     setColumnWidths() {

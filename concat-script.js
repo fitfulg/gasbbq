@@ -16,10 +16,11 @@ class SheetController {
         this.sheetService.setColumnWidths();
         this.sheetService.applyFormatting();
         this.sheetService.applyBackgroundColors();
-
+        this.sheetService.applyTextColorToRange('A1:E1', COLORS.white());
         this.sheetService.applyTextColorToRange('F2:G45', COLORS.lightGray());
 
         this.validationService.applyConfirmationValidation();
+
         this.protectionService.protectColumns(['F2:F45', 'G2:G45']);
 
         this.wordCountService.countWords('C', 'F');
@@ -83,7 +84,6 @@ class SheetService {
                 .setFontWeight('bold')
                 .setBorder(true, true, true, true, true, true);
         }
-        this.sheet.getRange('A1:E1').setFontColor(COLORS.white());
     }
 
     setColumnWidths() {
@@ -213,7 +213,6 @@ const COLUMN_CONFIG = [
 // Main Script
 function onOpen() {
     Logger.log('onOpen called');
-    Logger.log("Hello World");
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     const eventController = new EventController(sheet);
     eventController.onOpen();
