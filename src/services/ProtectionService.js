@@ -16,4 +16,4 @@ class ProtectionService {
         });
     }
 }
-module.exports = { ProtectionService };
+// module.exports = { ProtectionService };

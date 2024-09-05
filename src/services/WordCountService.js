@@ -27,4 +27,4 @@ class WordCountService {
         resultRange.setValues(resultValues);  // Aquí se pasa un array 2D correctamente
     }
 }
-module.exports = { WordCountService };
+// module.exports = { WordCountService };

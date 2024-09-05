@@ -24,4 +24,4 @@ class SheetController {
         this.wordCountService.countWords('D', 'G');
     }
 }
-module.exports = { SheetController };
+// module.exports = { SheetController };

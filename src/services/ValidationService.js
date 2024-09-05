@@ -12,4 +12,4 @@ class ValidationService {
         this.sheet.getRange('B2:B45').setBorder(true, true, true, true, true, true);
     }
 }
-module.exports = { ValidationService };
+// module.exports = { ValidationService };

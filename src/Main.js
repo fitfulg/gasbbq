@@ -12,4 +12,4 @@ function onEdit(e) {
     const eventController = new EventController(sheet);
     eventController.onEdit(e);
 }
-module.exports = { onOpen, onEdit };
+// module.exports = { onOpen, onEdit };
