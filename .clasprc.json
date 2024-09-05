@@ -1,7 +1,16 @@
 {
-    "access_token": "ya29.a0AcM612zQA0jwiIYceryhQ15MPlAYRvDATijQUqSYatxavJ_AXzR0VaFx5gmnYaCIyHXncbVci-rJ1j2m_sCZPdO7L03PD5psJ0gRoUc5l2uEuonff4vQCH63U1m-8oKdoDAvA8kIej_eqVh5bAaycD5W2tJ4JTZv0kEKCvs2aCgYKATUSARISFQHGX2MijP90-3PjUd_1kAg7iKYw9Q0175",
-    "refresh_token": "1//036OSc0rTDx0WCgYIARAAGAMSNwF-L9IrCAZVcva23OLK3GTubjPvm6zlOCTqGf5QI64EV2Y0DiKR3indy65YoZGHthEg2Xy-fHY",
-    "scope": "https://www.googleapis.com/auth/script.deployments https://www.googleapis.com/auth/script.projects https://www.googleapis.com/auth/script.webapp.deploy https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/service.management https://www.googleapis.com/auth/logging.read https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/cloud-platform",
-    "token_type": "Bearer",
-    "expiry_date": 1725518520696
+    "token": {
+        "access_token": "ya29.a0AcM612zQA0jwiIYceryhQ15MPlAYRvDATijQUqSYatxavJ_AXzR0VaFx5gmnYaCIyHXncbVci-rJ1j2m_sCZPdO7L03PD5psJ0gRoUc5l2uEuonff4vQCH63U1m-8oKdoDAvA8kIej_eqVh5bAaycD5W2tJ4JTZv0kEKCvs2aCgYKATUSARISFQHGX2MijP90-3PjUd_1kAg7iKYw9Q0175",
+        "refresh_token": "1//036OSc0rTDx0WCgYIARAAGAMSNwF-L9IrCAZVcva23OLK3GTubjPvm6zlOCTqGf5QI64EV2Y0DiKR3indy65YoZGHthEg2Xy-fHY",
+        "scope": "https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/service.management https://www.googleapis.com/auth/script.webapp.deploy https://www.googleapis.com/auth/script.projects https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/drive.metadata.readonly openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/logging.read https://www.googleapis.com/auth/script.deployments",
+        "token_type": "Bearer",
+        "id_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImIyZjgwYzYzNDYwMGVkMTMwNzIxMDFhOGI0MjIwNDQzNDMzZGIyODIiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIxMDcyOTQ0OTA1NDk5LXZtMnYyaTVkdm4wYTBkMm80Y2EzNmkxdmdlOGN2Ym4wLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiMTA3Mjk0NDkwNTQ5OS12bTJ2Mmk1ZHZuMGEwZDJvNGNhMzZpMXZnZThjdmJuMC5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjEwODg0NjkyODc4MTY1NTk2NDU3MyIsImVtYWlsIjoicmM4NC5lcmljQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiSzZrU1JvOTdNY2lUNWtWOVhyT3A2USIsIm5hbWUiOiJFcmljIFJhbW9zIiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS9hL0FDZzhvY0k5MHBWcW0yVUFGNEtpVlNJbXJrbEktZlB1SWhWenlZRk5mUTBhZUVVRTBzZUxKUW89czk2LWMiLCJnaXZlbl9uYW1lIjoiRXJpYyIsImZhbWlseV9uYW1lIjoiUmFtb3MiLCJpYXQiOjE3MjU1MTQ5MjEsImV4cCI6MTcyNTUxODUyMX0.PPUtHfODDZOo3je_7b-wCJY6Y_6MITCsara5hvFBXBcSGRqnQvvLQy3lzfIsL5ffwaDt16IIuXw7xZuuloxaPYgRyCufHsq34lxfnOvCLtcJRF9G_OBSvWKFJRWSJBmeBoAtCyhtYU6fh4G6tDOCUKlaksqqg_ZdXJQt-x4q_JeetZmTPsLUYF5pw-937RFr_yTo2kSG411a0iZkeGIjLjb_uraascFYN9wBBfdgwzK6QaRutxLxCnkZMGRGg74v09aG_KDrQP02ZS0G43pgcyEEZ3aHZOTP2KLCEnrVisRNumlgdhYJvQDbv1PR4UduuaTVRrkj7TQj3vhLjmkLGg",
+        "expiry_date": 1725518520696
+    },
+    "oauth2ClientSettings": {
+        "clientId": "1072944905499-vm2v2i5dvn0a0d2o4ca36i1vge8cvbn0.apps.googleusercontent.com",
+        "clientSecret": "v6V3fKV_zWU7iw1DrpO1rknX",
+        "redirectUri": "http://localhost"
+    },
+    "isLocalCreds": false
 }
