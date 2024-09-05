@@ -27,22 +27,10 @@ jobs:
     - name: Install clasp
       run: npm install -g @google/clasp
 
-    # Install jq to handle JSON parsing
-    - name: Install jq
-      run: sudo apt-get install jq
-
     # Set up .clasprc.json with the secret token
     - name: Set up .clasprc.json
       run: |
-        echo '{
-          "token": {
-            "access_token": "'$(echo "${{ secrets.CLASP_TOKEN }}" | jq -r .access_token)'",
-            "refresh_token": "'$(echo "${{ secrets.CLASP_TOKEN }}" | jq -r .refresh_token)'",
-            "scope": "https://www.googleapis.com/auth/script.deployments https://www.googleapis.com/auth/script.projects https://www.googleapis.com/auth/script.webapp.deploy https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/service.management https://www.googleapis.com/auth/logging.read https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/cloud-platform",
-            "token_type": "Bearer",
-            "expiry_date": 1725518520696
-          }
-        }' > ~/.clasprc.json
+        echo '${{ secrets.CLASP_TOKEN }}' > ~/.clasprc.json
 
     # Create .clasp.json file with scriptId
     - name: Create .clasp.json
