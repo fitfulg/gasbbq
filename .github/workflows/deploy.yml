@@ -27,7 +27,11 @@ jobs:
     - name: Install clasp
       run: npm install -g @google/clasp
 
-    # Set up .clasprc.json with both access_token and refresh_token
+    # Install jq to handle JSON parsing
+    - name: Install jq
+      run: sudo apt-get install jq
+
+    # Set up .clasprc.json with the secret token
     - name: Set up .clasprc.json
       run: |
         echo '{

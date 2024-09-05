@@ -1,8 +1,7 @@
 {
     "access_token": "ya29.a0AcM612zQA0jwiIYceryhQ15MPlAYRvDATijQUqSYatxavJ_AXzR0VaFx5gmnYaCIyHXncbVci-rJ1j2m_sCZPdO7L03PD5psJ0gRoUc5l2uEuonff4vQCH63U1m-8oKdoDAvA8kIej_eqVh5bAaycD5W2tJ4JTZv0kEKCvs2aCgYKATUSARISFQHGX2MijP90-3PjUd_1kAg7iKYw9Q0175",
     "refresh_token": "1//036OSc0rTDx0WCgYIARAAGAMSNwF-L9IrCAZVcva23OLK3GTubjPvm6zlOCTqGf5QI64EV2Y0DiKR3indy65YoZGHthEg2Xy-fHY",
-    "scope": "...",
+    "scope": "https://www.googleapis.com/auth/script.deployments https://www.googleapis.com/auth/script.projects https://www.googleapis.com/auth/script.webapp.deploy https://www.googleapis.com/auth/drive.metadata.readonly https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/service.management https://www.googleapis.com/auth/logging.read https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/cloud-platform",
     "token_type": "Bearer",
-    "id_token": "...",
     "expiry_date": 1725518520696
 }
