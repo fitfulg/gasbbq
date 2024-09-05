@@ -1,14 +1,24 @@
 class EventController {
     constructor(sheet) {
         Logger.log('EventController constructor called');
-        this.sheetController = new SheetController(sheet);
+        this.languageService = new LanguageService(sheet);
+        this.sheetController = new SheetController(sheet, this.languageService); // Inject LanguageService into SheetController
+        this.menuService = new MenuService(this.languageService); // Inject LanguageService into MenuService
     }
 
+    /**
+     * Handles the onOpen event to set up the sheet and menu.
+     */
     onOpen() {
         Logger.log('onOpen called');
         this.sheetController.setupSheet();
+        this.menuService.createMenu(this); // Create the language change menu
     }
 
+    /**
+     * Handles the onEdit event to update word counts when cells are edited.
+     * @param {GoogleAppsScript.Events.SheetsOnEdit} e - The event object.
+     */
     onEdit(e) {
         Logger.log('onEdit called');
         const range = e.range;
@@ -23,6 +33,16 @@ class EventController {
             this.sheetController.wordCountService.countWords('C', 'F');
             this.sheetController.wordCountService.countWords('D', 'G');
         }
+    }
+
+    /**
+     * Changes the language when the menu item is selected.
+     * @param {string} languageCode - The code of the selected language.
+     */
+    changeLanguage(languageCode) {
+        Logger.log(`EventController: changeLanguage to ${languageCode}`);
+        this.languageService.changeLanguage(languageCode);
+        this.sheetController.setupSheet(); // Reapply headers with the new language
     }
 }
 // module.exports = { EventController };

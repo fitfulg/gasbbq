@@ -1,8 +1,8 @@
 // Controllers
 class SheetController {
-    constructor(sheet) {
+    constructor(sheet, languageService) {
         Logger.log('SheetController constructor called');
-        this.sheetService = new SheetService(sheet);
+        this.sheetService = new SheetService(sheet, languageService);
         this.dropdownService = new DropdownService(sheet);
         this.protectionService = new ProtectionService(sheet);
         this.wordCountService = new WordCountService(sheet);
@@ -31,14 +31,24 @@ class SheetController {
 class EventController {
     constructor(sheet) {
         Logger.log('EventController constructor called');
-        this.sheetController = new SheetController(sheet);
+        this.languageService = new LanguageService(sheet);
+        this.sheetController = new SheetController(sheet, this.languageService); // Inject LanguageService into SheetController
+        this.menuService = new MenuService(this.languageService); // Inject LanguageService into MenuService
     }
 
+    /**
+     * Handles the onOpen event to set up the sheet and menu.
+     */
     onOpen() {
         Logger.log('onOpen called');
         this.sheetController.setupSheet();
+        this.menuService.createMenu(this); // Create the language change menu
     }
 
+    /**
+     * Handles the onEdit event to update word counts when cells are edited.
+     * @param {GoogleAppsScript.Events.SheetsOnEdit} e - The event object.
+     */
     onEdit(e) {
         Logger.log('onEdit called');
         const range = e.range;
@@ -54,14 +64,25 @@ class EventController {
             this.sheetController.wordCountService.countWords('D', 'G');
         }
     }
+
+    /**
+     * Changes the language when the menu item is selected.
+     * @param {string} languageCode - The code of the selected language.
+     */
+    changeLanguage(languageCode) {
+        Logger.log(`EventController: changeLanguage to ${languageCode}`);
+        this.languageService.changeLanguage(languageCode);
+        this.sheetController.setupSheet(); // Reapply headers with the new language
+    }
 }
 
 
 // Services
 class SheetService {
-    constructor(sheet) {
+    constructor(sheet, languageService) {
         Logger.log('SheetService constructor called');
         this.sheet = sheet;
+        this.languageService = languageService;
     }
 
     ensureRowCount(count) {
@@ -76,13 +97,13 @@ class SheetService {
 
     setupHeaders() {
         Logger.log('setupHeaders called');
-        for (const config of COLUMN_CONFIG) {
-            const columnIndex = this.sheet.getRange(config.column + '1').getColumn();
-            this.sheet.getRange(1, columnIndex)
-                .setValue(config.name)
+        const headers = this.languageService.getHeaders();
+        headers.forEach((header, index) => {
+            this.sheet.getRange(1, index + 1)
+                .setValue(header)
                 .setFontWeight('bold')
                 .setBorder(true, true, true, true, true, true);
-        }
+        });
     }
 
     setColumnWidths() {
@@ -187,6 +208,80 @@ class WordCountService {
 }
 
 
+class LanguageService {
+    constructor(sheet) {
+        Logger.log('LanguageService constructor called');
+        this.sheet = sheet;
+        this.currentLanguage = 'ca'; // Default to English
+    }
+
+    /**
+     * Changes the language of the sheet based on the selected language code.
+     * @param {string} languageCode - The code of the language to switch to.
+     */
+    changeLanguage(languageCode) {
+        Logger.log(`Changing language to: ${languageCode}`);
+        const selectedLanguage = LANGUAGES.find(lang => lang.code === languageCode);
+
+        if (selectedLanguage) {
+            const headers = selectedLanguage.headers;
+            for (let i = 0; i < headers.length; i++) {
+                this.sheet.getRange(1, i + 1).setValue(headers[i]);
+            }
+            this.currentLanguage = languageCode;
+        } else {
+            Logger.log(`Language code: ${languageCode} not found.`);
+        }
+        SpreadsheetApp.flush();// Force changes to be written to the sheet
+    }
+
+    getHeaders() {
+        const selectedLanguage = LANGUAGES.find(lang => lang.code === this.currentLanguage);
+        return selectedLanguage ? selectedLanguage.headers : [];
+    }
+
+    /**
+     * Retrieves the current language code.
+     * @returns {string} - The current language code.
+     */
+    getCurrentLanguage() {
+        return this.currentLanguage;
+    }
+
+    /**
+     * Returns the name of the 'Language' menu based on the current language.
+     * @returns {string} - The localized name for the menu.
+     */
+    getMenuName() {
+        const currentLanguage = LANGUAGES.find(lang => lang.code === this.currentLanguage);
+        return currentLanguage ? currentLanguage.menuName : 'Language';
+    }
+}
+
+class MenuService {
+    constructor(languageService) {
+        Logger.log('MenuService constructor called');
+        this.languageService = languageService; // Inject LanguageService dependency
+    }
+
+    /**
+    * Creates a custom menu in the Google Sheets UI to change languages.
+    * @param {EventController} eventController - The event controller to handle menu actions.
+    */
+    createMenu(eventController) {
+        const ui = SpreadsheetApp.getUi();
+        const menuName = this.languageService.getMenuName();
+        const menu = ui.createMenu(menuName);
+
+        // Add language options to the menu, binding them to the common function
+        LANGUAGES.forEach(language => {
+            menu.addItem(language.name, `changeLanguage_${language.code}`);
+        });
+
+        menu.addToUi();
+    }
+}
+
 // Utils
 const COLORS = {
     darkGray: () => '#4d4d4d',
@@ -206,6 +301,26 @@ const COLUMN_CONFIG = [
     { column: 'G', name: 'D-counter (no editar)', width: 200 }
 ];
 
+const LANGUAGES = [
+    {
+        code: 'en',
+        name: 'English',
+        menuName: 'Language',
+        headers: ['Name', 'Confirmation', 'Food Preference', 'Drink Preference', 'Allergies', 'C-counter (do not edit)', 'D-counter (do not edit)']
+    },
+    {
+        code: 'es',
+        name: 'Castellano',
+        menuName: 'Idioma',
+        headers: ['Nombre', 'Confirmación', 'Preferencia de Comida', 'Preferencia de Bebida', 'Alergias', 'C-contador (no editar)', 'D-contador (no editar)']
+    },
+    {
+        code: 'ca',
+        name: 'Català',
+        menuName: 'Idioma',
+        headers: ['Nom', 'Confirmació', 'Preferència menjars', 'Preferència begudes', 'Al·lèrgies', 'C-counter (no editar)', 'D-counter (no editar)']
+    }
+];
 
 
 
@@ -223,5 +338,16 @@ function onEdit(e) {
     const eventController = new EventController(sheet);
     eventController.onEdit(e);
 }
+
+function onChangeLanguage(languageCode) {
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    const eventController = new EventController(sheet);
+    eventController.changeLanguage(languageCode);
+}
+
+const changeLanguage_en = () => onChangeLanguage('en');
+const changeLanguage_es = () => onChangeLanguage('es');
+const changeLanguage_ca = () => onChangeLanguage('ca');
+
 
 

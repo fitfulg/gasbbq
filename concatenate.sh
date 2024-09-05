@@ -25,6 +25,8 @@ append_with_newline "$src_dir/services/SheetService.js"
 append_with_newline "$src_dir/services/DropdownService.js"
 append_with_newline "$src_dir/services/ProtectionService.js"
 append_with_newline "$src_dir/services/WordCountService.js"
+append_with_newline "$src_dir/services/LanguageService.js"
+append_with_newline "$src_dir/services/MenuService.js"
 
 echo "// Utils" >> "$output_file"
 append_with_newline "$src_dir/utils/Utils.js"

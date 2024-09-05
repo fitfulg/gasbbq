@@ -1,7 +1,7 @@
 class SheetController {
-    constructor(sheet) {
+    constructor(sheet, languageService) {
         Logger.log('SheetController constructor called');
-        this.sheetService = new SheetService(sheet);
+        this.sheetService = new SheetService(sheet, languageService);
         this.dropdownService = new DropdownService(sheet);
         this.protectionService = new ProtectionService(sheet);
         this.wordCountService = new WordCountService(sheet);

@@ -1,7 +1,8 @@
 class SheetService {
-    constructor(sheet) {
+    constructor(sheet, languageService) {
         Logger.log('SheetService constructor called');
         this.sheet = sheet;
+        this.languageService = languageService;
     }
 
     ensureRowCount(count) {
@@ -16,13 +17,13 @@ class SheetService {
 
     setupHeaders() {
         Logger.log('setupHeaders called');
-        for (const config of COLUMN_CONFIG) {
-            const columnIndex = this.sheet.getRange(config.column + '1').getColumn();
-            this.sheet.getRange(1, columnIndex)
-                .setValue(config.name)
+        const headers = this.languageService.getHeaders();
+        headers.forEach((header, index) => {
+            this.sheet.getRange(1, index + 1)
+                .setValue(header)
                 .setFontWeight('bold')
                 .setBorder(true, true, true, true, true, true);
-        }
+        });
     }
 
     setColumnWidths() {
