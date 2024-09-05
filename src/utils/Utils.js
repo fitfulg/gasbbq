@@ -17,4 +17,4 @@ const COLUMN_CONFIG = [
 ];
 
 
-module.exports = { COLORS, COLUMN_CONFIG };
+// module.exports = { COLORS, COLUMN_CONFIG };
