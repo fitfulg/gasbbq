@@ -189,25 +189,32 @@ class SheetService {
      */
     applyCompletionFormatting() {
         Logger.log('applyCompletionFormatting called');
-        const range = this.sheet.getRange('A2:E45');
+        const range = this.sheet.getRange('A2:E45'); // Range from columns A to E
         const values = range.getValues();
+        const confirmRange = this.sheet.getRange('B2:B45'); // Range for the "Confirmation" column (B)
+        const confirmValues = confirmRange.getValues();
 
         for (let i = 0; i < values.length; i++) {
             const rowValues = values[i];
-            const rowNumber = i + 2;
+            const confirmationValue = confirmValues[i][0]; // Value from column B (Yes/No)
+            const rowNumber = i + 2; // Row number on the sheet
             const isRowComplete = rowValues.every(cell => cell !== '');
 
-            if (isRowComplete) {
+            if (confirmationValue === 'No') {
+                this.sheet.getRange(rowNumber, 1, 1, 5).setBackground(COLORS.lightRed());
+            } else if (isRowComplete) {
                 this.sheet.getRange(rowNumber, 1, 1, 5).setBackground(COLORS.lightGreen());
                 this.applyCompletionTextColor(rowNumber); // Apply text color to columns C and D
             } else {
-                this.applyRowBackground(rowNumber); // Restore the default background for incomplete rows
+                this.applyRowBackground(rowNumber);
             }
+
             // Always apply red color to column E
             const rangeE = this.sheet.getRange(rowNumber, 5);
             this.applyTextColorToRange(rangeE, COLORS.red());
         }
     }
+
 
 }
 
@@ -451,10 +458,12 @@ const COLORS = {
     lightYellow: () => '#ffffe6',
     lightBlue: () => '#e6f2ff',
     lightGreen: () => '#e6ffe6',
+    lightRed: () => '#ffcccc',
     blue: () => '#0000FF',
     brown: () => '#8B4513',
     red: () => '#FF0000'
 };
+
 
 
 const COLUMN_CONFIG = [

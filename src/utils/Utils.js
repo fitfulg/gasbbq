@@ -5,10 +5,12 @@ const COLORS = {
     lightYellow: () => '#ffffe6',
     lightBlue: () => '#e6f2ff',
     lightGreen: () => '#e6ffe6',
+    lightRed: () => '#ffcccc',
     blue: () => '#0000FF',
     brown: () => '#8B4513',
     red: () => '#FF0000'
 };
+
 
 
 const COLUMN_CONFIG = [
