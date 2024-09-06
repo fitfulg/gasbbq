@@ -4,6 +4,9 @@ class DropdownService {
         this.sheet = sheet;
     }
 
+    /**
+     * Apply dropdown validation to the range
+     */
     applyConfirmationValidation() {
         Logger.log('applyConfirmationValidation called');
         const confirmRange = this.sheet.getRange('B2:B45');

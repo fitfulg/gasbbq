@@ -66,13 +66,16 @@ class EventController {
     }
 
     /**
-     * Changes the language when the menu item is selected.
-     * @param {string} languageCode - The code of the selected language.
-     */
+    * Changes the language when the menu item is selected and shows an alert to reload the page.
+    * @param {string} languageCode - The code of the selected language.
+    */
     changeLanguage(languageCode) {
         Logger.log(`EventController: changeLanguage to ${languageCode}`);
         this.languageService.changeLanguage(languageCode);
-        this.sheetController.setupSheet(); // Reapply headers with the new language
+
+        const messages = this.languageService.getAlertMessages();
+        const ui = SpreadsheetApp.getUi();
+        ui.alert(messages.languageChanged, messages.reloadPage, ui.ButtonSet.OK);
     }
 }
 
@@ -147,6 +150,9 @@ class DropdownService {
         this.sheet = sheet;
     }
 
+    /**
+     * Apply dropdown validation to the range
+     */
     applyConfirmationValidation() {
         Logger.log('applyConfirmationValidation called');
         const confirmRange = this.sheet.getRange('B2:B45');
@@ -212,7 +218,8 @@ class LanguageService {
     constructor(sheet) {
         Logger.log('LanguageService constructor called');
         this.sheet = sheet;
-        this.currentLanguage = 'ca'; // Default to English
+        this.currentLanguage = 'ca'; // Default language
+        this.currentLanguage = this.getStoredLanguage() || this.defaultLanguage;
     }
 
     /**
@@ -229,10 +236,29 @@ class LanguageService {
                 this.sheet.getRange(1, i + 1).setValue(headers[i]);
             }
             this.currentLanguage = languageCode;
+            this.storeLanguage(languageCode);
         } else {
             Logger.log(`Language code: ${languageCode} not found.`);
         }
         SpreadsheetApp.flush();// Force changes to be written to the sheet
+    }
+
+    /**
+    * Stores the selected language in PropertiesService.
+    * @param {string} languageCode - The language code to store.
+    */
+    storeLanguage(languageCode) {
+        const userProperties = PropertiesService.getUserProperties();
+        userProperties.setProperty('SELECTED_LANGUAGE', languageCode);
+    }
+
+    /**
+     * Retrieves the stored language from PropertiesService.
+     * @returns {string|null} - The stored language code or null if not set.
+     */
+    getStoredLanguage() {
+        const userProperties = PropertiesService.getUserProperties();
+        return userProperties.getProperty('SELECTED_LANGUAGE');
     }
 
     getHeaders() {
@@ -256,6 +282,15 @@ class LanguageService {
         const currentLanguage = LANGUAGES.find(lang => lang.code === this.currentLanguage);
         return currentLanguage ? currentLanguage.menuName : 'Language';
     }
+
+    /**
+    * Gets the localized alert messages for the current language.
+    * @returns {object} - The messages for alerts in the selected language.
+    */
+    getAlertMessages() {
+        const selectedLanguage = LANGUAGES.find(lang => lang.code === this.currentLanguage);
+        return selectedLanguage ? selectedLanguage.messages : { languageChanged: 'Language changed', reloadPage: 'Please reload the page to apply the changes.' };
+    }
 }
 
 class MenuService {
@@ -265,20 +300,18 @@ class MenuService {
     }
 
     /**
-    * Creates a custom menu in the Google Sheets UI to change languages.
-    * @param {EventController} eventController - The event controller to handle menu actions.
+    * Creates the language menu, removing any old menu when the language changes.
+    * @param {EventController} eventController - Controller to handle the menu actions.
+    * @param {boolean} isLanguageChange - Indicates if the language is being changed to remove the previous menu.
     */
     createMenu(eventController) {
+        Logger.log('Create menu called');
         const ui = SpreadsheetApp.getUi();
-        const menuName = this.languageService.getMenuName();
-        const menu = ui.createMenu(menuName);
-
-        // Add language options to the menu, binding them to the common function
-        LANGUAGES.forEach(language => {
-            menu.addItem(language.name, `changeLanguage_${language.code}`);
-        });
-
-        menu.addToUi();
+        ui.createMenu(this.languageService.getMenuName())
+            .addItem('English', 'changeLanguage_en')
+            .addItem('Castellano', 'changeLanguage_es')
+            .addItem('Català', 'changeLanguage_ca')
+            .addToUi();
     }
 }
 
@@ -306,48 +339,61 @@ const LANGUAGES = [
         code: 'en',
         name: 'English',
         menuName: 'Language',
-        headers: ['Name', 'Confirmation', 'Food Preference', 'Drink Preference', 'Allergies', 'C-counter (do not edit)', 'D-counter (do not edit)']
+        headers: ['Name', 'Confirmation', 'Food Preference', 'Drink Preference', 'Allergies', 'C-counter (do not edit)', 'D-counter (do not edit)'],
+        messages: {
+            languageChanged: 'Language changed',
+            reloadPage: 'Please reload the page to apply the changes.'
+        }
     },
     {
         code: 'es',
         name: 'Castellano',
         menuName: 'Idioma',
-        headers: ['Nombre', 'Confirmación', 'Preferencia de Comida', 'Preferencia de Bebida', 'Alergias', 'C-contador (no editar)', 'D-contador (no editar)']
+        headers: ['Nombre', 'Confirmación', 'Preferencia de Comida', 'Preferencia de Bebida', 'Alergias', 'C-contador (no editar)', 'D-contador (no editar)'],
+        messages: {
+            languageChanged: 'Idioma cambiado',
+            reloadPage: 'Por favor, recargue la página para aplicar los cambios.'
+        }
     },
     {
         code: 'ca',
         name: 'Català',
         menuName: 'Idioma',
-        headers: ['Nom', 'Confirmació', 'Preferència menjars', 'Preferència begudes', 'Al·lèrgies', 'C-counter (no editar)', 'D-counter (no editar)']
+        headers: ['Nom', 'Confirmació', 'Preferència menjars', 'Preferència begudes', 'Al·lèrgies', 'C-counter (no editar)', 'D-counter (no editar)'],
+        messages: {
+            languageChanged: 'Idioma canviat',
+            reloadPage: 'Si us plau, recarregui la pàgina per aplicar els canvis.'
+        }
     }
 ];
 
 
 
-// Main Script
-function onOpen() {
-    Logger.log('onOpen called');
+
+// Triggers
+function handleEvent(callback, ...args) {
+    Logger.log(`${callback.name} called`);
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     const eventController = new EventController(sheet);
-    eventController.onOpen();
+    callback.apply(eventController, args);
+}
+
+function onOpen() {
+    handleEvent(EventController.prototype.onOpen);
 }
 
 function onEdit(e) {
-    Logger.log('onEdit called');
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    const eventController = new EventController(sheet);
-    eventController.onEdit(e);
+    handleEvent(EventController.prototype.onEdit, e);
 }
 
 function onChangeLanguage(languageCode) {
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-    const eventController = new EventController(sheet);
-    eventController.changeLanguage(languageCode);
+    handleEvent(EventController.prototype.changeLanguage, languageCode);
 }
+
+
+// Actions
 
 const changeLanguage_en = () => onChangeLanguage('en');
 const changeLanguage_es = () => onChangeLanguage('es');
 const changeLanguage_ca = () => onChangeLanguage('ca');
-
-
 

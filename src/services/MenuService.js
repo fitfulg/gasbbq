@@ -5,19 +5,17 @@ class MenuService {
     }
 
     /**
-    * Creates a custom menu in the Google Sheets UI to change languages.
-    * @param {EventController} eventController - The event controller to handle menu actions.
+    * Creates the language menu, removing any old menu when the language changes.
+    * @param {EventController} eventController - Controller to handle the menu actions.
+    * @param {boolean} isLanguageChange - Indicates if the language is being changed to remove the previous menu.
     */
     createMenu(eventController) {
+        Logger.log('Create menu called');
         const ui = SpreadsheetApp.getUi();
-        const menuName = this.languageService.getMenuName();
-        const menu = ui.createMenu(menuName);
-
-        // Add language options to the menu, binding them to the common function
-        LANGUAGES.forEach(language => {
-            menu.addItem(language.name, `changeLanguage_${language.code}`);
-        });
-
-        menu.addToUi();
+        ui.createMenu(this.languageService.getMenuName())
+            .addItem('English', 'changeLanguage_en')
+            .addItem('Castellano', 'changeLanguage_es')
+            .addItem('Català', 'changeLanguage_ca')
+            .addToUi();
     }
 }

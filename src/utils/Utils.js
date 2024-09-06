@@ -21,20 +21,33 @@ const LANGUAGES = [
         code: 'en',
         name: 'English',
         menuName: 'Language',
-        headers: ['Name', 'Confirmation', 'Food Preference', 'Drink Preference', 'Allergies', 'C-counter (do not edit)', 'D-counter (do not edit)']
+        headers: ['Name', 'Confirmation', 'Food Preference', 'Drink Preference', 'Allergies', 'C-counter (do not edit)', 'D-counter (do not edit)'],
+        messages: {
+            languageChanged: 'Language changed',
+            reloadPage: 'Please reload the page to apply the changes.'
+        }
     },
     {
         code: 'es',
         name: 'Castellano',
         menuName: 'Idioma',
-        headers: ['Nombre', 'Confirmación', 'Preferencia de Comida', 'Preferencia de Bebida', 'Alergias', 'C-contador (no editar)', 'D-contador (no editar)']
+        headers: ['Nombre', 'Confirmación', 'Preferencia de Comida', 'Preferencia de Bebida', 'Alergias', 'C-contador (no editar)', 'D-contador (no editar)'],
+        messages: {
+            languageChanged: 'Idioma cambiado',
+            reloadPage: 'Por favor, recargue la página para aplicar los cambios.'
+        }
     },
     {
         code: 'ca',
         name: 'Català',
         menuName: 'Idioma',
-        headers: ['Nom', 'Confirmació', 'Preferència menjars', 'Preferència begudes', 'Al·lèrgies', 'C-counter (no editar)', 'D-counter (no editar)']
+        headers: ['Nom', 'Confirmació', 'Preferència menjars', 'Preferència begudes', 'Al·lèrgies', 'C-counter (no editar)', 'D-counter (no editar)'],
+        messages: {
+            languageChanged: 'Idioma canviat',
+            reloadPage: 'Si us plau, recarregui la pàgina per aplicar els canvis.'
+        }
     }
 ];
+
 
 // module.exports = { COLORS, COLUMN_CONFIG, LANGUAGES };

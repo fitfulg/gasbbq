@@ -31,7 +31,10 @@ append_with_newline "$src_dir/services/MenuService.js"
 echo "// Utils" >> "$output_file"
 append_with_newline "$src_dir/utils/Utils.js"
 
-echo "// Main Script" >> "$output_file"
-append_with_newline "$src_dir/Main.js"
+echo "// Triggers" >> "$output_file"
+append_with_newline "$src_dir/triggers/Triggers.js"
+
+echo "// Actions" >> "$output_file"
+append_with_newline "$src_dir/actions/LanguageActions.js"
 
 echo "Concatenation complete. Output written to $output_file"

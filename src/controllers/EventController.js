@@ -36,13 +36,16 @@ class EventController {
     }
 
     /**
-     * Changes the language when the menu item is selected.
-     * @param {string} languageCode - The code of the selected language.
-     */
+    * Changes the language when the menu item is selected and shows an alert to reload the page.
+    * @param {string} languageCode - The code of the selected language.
+    */
     changeLanguage(languageCode) {
         Logger.log(`EventController: changeLanguage to ${languageCode}`);
         this.languageService.changeLanguage(languageCode);
-        this.sheetController.setupSheet(); // Reapply headers with the new language
+
+        const messages = this.languageService.getAlertMessages();
+        const ui = SpreadsheetApp.getUi();
+        ui.alert(messages.languageChanged, messages.reloadPage, ui.ButtonSet.OK);
     }
 }
 // module.exports = { EventController };
