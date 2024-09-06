@@ -36,8 +36,8 @@ class EventController {
                 range.setValue(value.replace(/\s+/g, '-'));
             }
 
-            this.sheetController.wordCountService.countWords('C', 'F');
-            this.sheetController.wordCountService.countWords('D', 'G');
+            this.sheetController.wordCountService.countWords('C', 'H');
+            this.sheetController.wordCountService.countWords('D', 'I');
         }
     }
 
