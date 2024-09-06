@@ -42,6 +42,7 @@ class EventController {
     onOpen() {
         Logger.log('onOpen called');
         this.sheetController.setupSheet();
+        this.sheetController.sheetService.applyCompletionFormatting();
         this.menuService.createLanguageMenu(this);
         this.menuService.createDeveloperMenu();
     }
@@ -54,6 +55,10 @@ class EventController {
         Logger.log('onEdit called');
         const range = e.range;
         const sheet = e.source.getActiveSheet();
+
+        if (range.getColumn() >= 1 && range.getColumn() <= 5) {
+            this.sheetController.sheetService.applyCompletionFormatting(); // Check for completion on edit
+        }
 
         if (range.getColumn() === 3 || range.getColumn() === 4) {
             const value = range.getValue().trim();
@@ -128,18 +133,58 @@ class SheetService {
             .setVerticalAlignment("middle");
     }
 
+    /**
+    * Applies the default background colors to the entire sheet.
+    */
     applyBackgroundColors() {
         Logger.log('applyBackgroundColors called');
         this.sheet.getRange('A1:E1').setBackground(COLORS.darkGray());
         this.sheet.getRange('F1:G1').setBackground(COLORS.white()).setFontColor(COLORS.lightGray());
-        this.sheet.getRange('A2:A45').setBackground(COLORS.lightGray());
-        this.sheet.getRange('C2:C45').setBackground(COLORS.lightYellow());
-        this.sheet.getRange('D2:D45').setBackground(COLORS.lightBlue());
+
+        for (let row = 2; row <= 45; row++) {
+            this.applyRowBackground(row); // Reuse the same logic for default backgrounds
+        }
+    }
+
+    /**
+    * Applies the background colors for a specific ROW based on the default layout.
+    * @param {number} row - The row number where default backgrounds should be reapplied.
+    */
+    applyRowBackground(row) {
+        Logger.log(`applyRowBackground called for row: ${row}`);
+        this.sheet.getRange(row, 1).setBackground(COLORS.lightGray());
+        this.sheet.getRange(row, 2).setBackground(COLORS.lightGray());
+        this.sheet.getRange(row, 3).setBackground(COLORS.lightYellow());
+        this.sheet.getRange(row, 4).setBackground(COLORS.lightBlue());
+        this.sheet.getRange(row, 5).setBackground(COLORS.lightGray());
     }
 
     applyTextColorToRange(range, color) {
         Logger.log('applyTextColorToRange called with range: ' + range + ', color: ' + color);
         this.sheet.getRange(range).setFontColor(color);
+    }
+
+    /**
+     * Checks for completed rows (A to E) and applies light green background to completed rows.
+     * Incomplete rows maintain their default background colors.
+     */
+    applyCompletionFormatting() {
+        Logger.log('applyCompletionFormatting called');
+        const range = this.sheet.getRange('A2:E45'); // Range of rows to check (A2 to E45)
+        const values = range.getValues();
+
+        for (let i = 0; i < values.length; i++) {
+            const rowValues = values[i];
+            const isRowComplete = rowValues.every(cell => cell !== '');
+
+            const rowRange = this.sheet.getRange(i + 2, 1, 1, 5);
+
+            if (isRowComplete) {
+                rowRange.setBackground(COLORS.lightGreen());
+            } else {
+                this.applyRowBackground(i + 2);
+            }
+        }
     }
 }
 
@@ -383,6 +428,7 @@ const COLORS = {
     white: () => '#ffffff',
     lightYellow: () => '#ffffe6',
     lightBlue: () => '#e6f2ff',
+    lightGreen: () => '#e6ffe6'
 };
 
 const COLUMN_CONFIG = [

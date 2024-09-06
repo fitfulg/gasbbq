@@ -4,6 +4,7 @@ const COLORS = {
     white: () => '#ffffff',
     lightYellow: () => '#ffffe6',
     lightBlue: () => '#e6f2ff',
+    lightGreen: () => '#e6ffe6'
 };
 
 const COLUMN_CONFIG = [

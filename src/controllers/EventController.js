@@ -12,6 +12,7 @@ class EventController {
     onOpen() {
         Logger.log('onOpen called');
         this.sheetController.setupSheet();
+        this.sheetController.sheetService.applyCompletionFormatting();
         this.menuService.createLanguageMenu(this);
         this.menuService.createDeveloperMenu();
     }
@@ -24,6 +25,10 @@ class EventController {
         Logger.log('onEdit called');
         const range = e.range;
         const sheet = e.source.getActiveSheet();
+
+        if (range.getColumn() >= 1 && range.getColumn() <= 5) {
+            this.sheetController.sheetService.applyCompletionFormatting(); // Check for completion on edit
+        }
 
         if (range.getColumn() === 3 || range.getColumn() === 4) {
             const value = range.getValue().trim();
