@@ -12,7 +12,8 @@ class EventController {
     onOpen() {
         Logger.log('onOpen called');
         this.sheetController.setupSheet();
-        this.menuService.createMenu(this); // Create the language change menu
+        this.menuService.createLanguageMenu(this);
+        this.menuService.createDeveloperMenu();
     }
 
     /**

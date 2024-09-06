@@ -42,7 +42,8 @@ class EventController {
     onOpen() {
         Logger.log('onOpen called');
         this.sheetController.setupSheet();
-        this.menuService.createMenu(this); // Create the language change menu
+        this.menuService.createLanguageMenu(this);
+        this.menuService.createDeveloperMenu();
     }
 
     /**
@@ -304,7 +305,7 @@ class MenuService {
     * @param {EventController} eventController - Controller to handle the menu actions.
     * @param {boolean} isLanguageChange - Indicates if the language is being changed to remove the previous menu.
     */
-    createMenu(eventController) {
+    createLanguageMenu(eventController) {
         Logger.log('Create menu called');
         const ui = SpreadsheetApp.getUi();
         ui.createMenu(this.languageService.getMenuName())
@@ -313,7 +314,67 @@ class MenuService {
             .addItem('Català', 'changeLanguage_ca')
             .addToUi();
     }
+
+    /**
+    * Creates a separate developer menu for handling properties.
+    * @param {EventController} eventController - Controller to handle the menu actions.
+    */
+    createDeveloperMenu() {
+        const ui = SpreadsheetApp.getUi();
+        ui.createMenu('Developer')
+            .addItem('GAS Console: List All Properties', 'listAllProperties')    // Action to list properties
+            .addItem('GAS Console: Delete Property', 'promptDeleteProperty')     // Option to delete a property
+            .addItem('GAS Console: Clear All Properties', 'clearAllProperties')  // Option to clear all properties
+            .addToUi();
+    }
 }
+
+class SheetPropertiesService {
+    /**
+     * Retrieves all properties stored in UserProperties.
+     * @returns {Object} - An object containing all properties and their values.
+     */
+    static listProperties() {
+        const userProperties = PropertiesService.getUserProperties();
+        const properties = userProperties.getProperties();
+        Logger.log('Listing all properties:');
+        for (let key in properties) {
+            Logger.log(`${key}: ${properties[key]}`);
+        }
+        return properties;
+    }
+
+    /**
+     * Retrieves a specific property by key.
+     * @param {string} key - The key of the property to retrieve.
+     * @returns {string|null} - The value of the property or null if not found.
+     */
+    static getProperty(key) {
+        const userProperties = PropertiesService.getUserProperties();
+        return userProperties.getProperty(key);
+    }
+
+    /**
+     * Deletes a specific property by key.
+     * @param {string} key - The key of the property to delete.
+     */
+    static deleteProperty(key) {
+        const userProperties = PropertiesService.getUserProperties();
+        userProperties.deleteProperty(key);
+        Logger.log(`Deleted property: ${key}`);
+    }
+
+    /**
+     * Clears all properties.
+     */
+    static clearAllProperties() {
+        const userProperties = PropertiesService.getUserProperties();
+        userProperties.deleteAllProperties();
+        Logger.log('All properties deleted.');
+    }
+}
+
+
 
 // Utils
 const COLORS = {
@@ -396,4 +457,33 @@ function onChangeLanguage(languageCode) {
 const changeLanguage_en = () => onChangeLanguage('en');
 const changeLanguage_es = () => onChangeLanguage('es');
 const changeLanguage_ca = () => onChangeLanguage('ca');
+
+/**
+ * List all properties and their values.
+ * @returns {Object} - An object containing all properties and their values.
+ */
+function listAllProperties() {
+    Logger.log('ListAllProperties called. Listing all properties:');
+    const properties = SheetPropertiesService.listProperties();
+    return properties;
+}
+
+/**
+ * Deletes a specific property by key.
+ * @param {string} key - The key of the property to delete.
+ */
+function deleteProperty(key) {
+    Logger.log(`Attempting to delete property: ${key}`);
+    SheetPropertiesService.deleteProperty(key);
+    SpreadsheetApp.getUi().alert(`Property ${key} has been deleted.`);
+}
+
+/**
+ * Deletes all properties.
+ */
+function clearAllProperties() {
+    Logger.log('Attempting to delete all properties.');
+    SheetPropertiesService.clearAllProperties();
+    SpreadsheetApp.getUi().alert('All properties have been deleted.');
+}
 

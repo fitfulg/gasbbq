@@ -27,6 +27,7 @@ append_with_newline "$src_dir/services/ProtectionService.js"
 append_with_newline "$src_dir/services/WordCountService.js"
 append_with_newline "$src_dir/services/LanguageService.js"
 append_with_newline "$src_dir/services/MenuService.js"
+append_with_newline "$src_dir/services/SheetPropertiesService.js"
 
 echo "// Utils" >> "$output_file"
 append_with_newline "$src_dir/utils/Utils.js"
@@ -36,5 +37,6 @@ append_with_newline "$src_dir/triggers/Triggers.js"
 
 echo "// Actions" >> "$output_file"
 append_with_newline "$src_dir/actions/LanguageActions.js"
+append_with_newline "$src_dir/actions/PropertiesActions.js"
 
 echo "Concatenation complete. Output written to $output_file"
