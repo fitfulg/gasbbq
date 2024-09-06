@@ -19,10 +19,15 @@ class SheetService {
         Logger.log('setupHeaders called');
         const headers = this.languageService.getHeaders();
         headers.forEach((header, index) => {
-            this.sheet.getRange(1, index + 1)
-                .setValue(header)
-                .setFontWeight('bold')
-                .setBorder(true, true, true, true, true, true);
+            if (index >= 5) {
+                this.sheet.getRange(1, index + 3).setValue(header) // H is column 8 (index + 3 because index starts at 0)
+                    .setFontWeight('bold')
+                    .setBorder(true, true, true, true, true, true);
+            } else {
+                this.sheet.getRange(1, index + 1).setValue(header) // A to E
+                    .setFontWeight('bold')
+                    .setBorder(true, true, true, true, true, true);
+            }
         });
     }
 
@@ -50,7 +55,7 @@ class SheetService {
     applyBackgroundColors() {
         Logger.log('applyBackgroundColors called');
         this.sheet.getRange('A1:E1').setBackground(COLORS.darkGray());
-        this.sheet.getRange('F1:G1').setBackground(COLORS.white()).setFontColor(COLORS.lightGray());
+        this.sheet.getRange('H1:I1').setBackground(COLORS.white());
 
         for (let row = 2; row <= 45; row++) {
             this.applyRowBackground(row); // Reuse the same logic for default backgrounds
@@ -70,9 +75,16 @@ class SheetService {
         this.sheet.getRange(row, 5).setBackground(COLORS.lightGray());
     }
 
-    applyTextColorToRange(range, color) {
-        Logger.log('applyTextColorToRange called with range: ' + range + ', color: ' + color);
-        this.sheet.getRange(range).setFontColor(color);
+    applyTextColorToRange(ranges, color) {
+        Logger.log('applyTextColorToRange called with ranges: ' + ranges + ', color: ' + color);
+
+        if (Array.isArray(ranges)) {
+            ranges.forEach(range => {
+                this.sheet.getRange(range).setFontColor(color);
+            });
+        } else {
+            this.sheet.getRange(ranges).setFontColor(color);
+        }
     }
 
     /**

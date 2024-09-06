@@ -15,14 +15,14 @@ class SheetController {
         this.sheetService.applyFormatting();
         this.sheetService.applyBackgroundColors();
         this.sheetService.applyTextColorToRange('A1:E1', COLORS.white());
-        this.sheetService.applyTextColorToRange('F2:G45', COLORS.lightGray());
+        this.sheetService.applyTextColorToRange('H2:I45', COLORS.lightGray());
 
         this.dropdownService.applyConfirmationValidation();
 
-        this.protectionService.protectColumns(['F2:F45', 'G2:G45']);
+        this.protectionService.protectColumns(['H2:H45', 'I2:I45']);
 
-        this.wordCountService.countWords('C', 'F');
-        this.wordCountService.countWords('D', 'G');
+        this.wordCountService.countWords('C', 'H');
+        this.wordCountService.countWords('D', 'I');
     }
 }
 // module.exports = { SheetController };

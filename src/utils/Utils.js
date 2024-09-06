@@ -13,8 +13,8 @@ const COLUMN_CONFIG = [
     { column: 'C', name: 'Preferència menjars', width: 300 },
     { column: 'D', name: 'Preferència begudes', width: 300 },
     { column: 'E', name: 'Al·lèrgies', width: 100 },
-    { column: 'F', name: 'C-counter (no editar)', width: 200 },
-    { column: 'G', name: 'D-counter (no editar)', width: 200 }
+    { column: 'H', name: 'C-counter (no editar)', width: 200 },
+    { column: 'I', name: 'D-counter (no editar)', width: 200 }
 ];
 
 const LANGUAGES = [

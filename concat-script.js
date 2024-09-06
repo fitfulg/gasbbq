@@ -16,14 +16,14 @@ class SheetController {
         this.sheetService.applyFormatting();
         this.sheetService.applyBackgroundColors();
         this.sheetService.applyTextColorToRange('A1:E1', COLORS.white());
-        this.sheetService.applyTextColorToRange('F2:G45', COLORS.lightGray());
+        this.sheetService.applyTextColorToRange('H2:I45', COLORS.lightGray());
 
         this.dropdownService.applyConfirmationValidation();
 
-        this.protectionService.protectColumns(['F2:F45', 'G2:G45']);
+        this.protectionService.protectColumns(['H2:H45', 'I2:I45']);
 
-        this.wordCountService.countWords('C', 'F');
-        this.wordCountService.countWords('D', 'G');
+        this.wordCountService.countWords('C', 'H');
+        this.wordCountService.countWords('D', 'I');
     }
 }
 
@@ -108,10 +108,15 @@ class SheetService {
         Logger.log('setupHeaders called');
         const headers = this.languageService.getHeaders();
         headers.forEach((header, index) => {
-            this.sheet.getRange(1, index + 1)
-                .setValue(header)
-                .setFontWeight('bold')
-                .setBorder(true, true, true, true, true, true);
+            if (index >= 5) {
+                this.sheet.getRange(1, index + 3).setValue(header) // H is column 8 (index + 3 because index starts at 0)
+                    .setFontWeight('bold')
+                    .setBorder(true, true, true, true, true, true);
+            } else {
+                this.sheet.getRange(1, index + 1).setValue(header) // A to E
+                    .setFontWeight('bold')
+                    .setBorder(true, true, true, true, true, true);
+            }
         });
     }
 
@@ -139,7 +144,7 @@ class SheetService {
     applyBackgroundColors() {
         Logger.log('applyBackgroundColors called');
         this.sheet.getRange('A1:E1').setBackground(COLORS.darkGray());
-        this.sheet.getRange('F1:G1').setBackground(COLORS.white()).setFontColor(COLORS.lightGray());
+        this.sheet.getRange('H1:I1').setBackground(COLORS.white());
 
         for (let row = 2; row <= 45; row++) {
             this.applyRowBackground(row); // Reuse the same logic for default backgrounds
@@ -159,9 +164,16 @@ class SheetService {
         this.sheet.getRange(row, 5).setBackground(COLORS.lightGray());
     }
 
-    applyTextColorToRange(range, color) {
-        Logger.log('applyTextColorToRange called with range: ' + range + ', color: ' + color);
-        this.sheet.getRange(range).setFontColor(color);
+    applyTextColorToRange(ranges, color) {
+        Logger.log('applyTextColorToRange called with ranges: ' + ranges + ', color: ' + color);
+
+        if (Array.isArray(ranges)) {
+            ranges.forEach(range => {
+                this.sheet.getRange(range).setFontColor(color);
+            });
+        } else {
+            this.sheet.getRange(ranges).setFontColor(color);
+        }
     }
 
     /**
@@ -437,8 +449,8 @@ const COLUMN_CONFIG = [
     { column: 'C', name: 'Preferència menjars', width: 300 },
     { column: 'D', name: 'Preferència begudes', width: 300 },
     { column: 'E', name: 'Al·lèrgies', width: 100 },
-    { column: 'F', name: 'C-counter (no editar)', width: 200 },
-    { column: 'G', name: 'D-counter (no editar)', width: 200 }
+    { column: 'H', name: 'C-counter (no editar)', width: 200 },
+    { column: 'I', name: 'D-counter (no editar)', width: 200 }
 ];
 
 const LANGUAGES = [
