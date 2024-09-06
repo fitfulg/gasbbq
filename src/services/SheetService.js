@@ -49,23 +49,16 @@ class SheetService {
             .setVerticalAlignment("middle");
     }
 
-    /**
-    * Applies the default background colors to the entire sheet.
-    */
     applyBackgroundColors() {
         Logger.log('applyBackgroundColors called');
         this.sheet.getRange('A1:E1').setBackground(COLORS.darkGray());
         this.sheet.getRange('H1:I1').setBackground(COLORS.white());
 
         for (let row = 2; row <= 45; row++) {
-            this.applyRowBackground(row); // Reuse the same logic for default backgrounds
+            this.applyRowBackground(row);
         }
     }
 
-    /**
-    * Applies the background colors for a specific ROW based on the default layout.
-    * @param {number} row - The row number where default backgrounds should be reapplied.
-    */
     applyRowBackground(row) {
         Logger.log(`applyRowBackground called for row: ${row}`);
         this.sheet.getRange(row, 1).setBackground(COLORS.lightGray());
@@ -75,40 +68,56 @@ class SheetService {
         this.sheet.getRange(row, 5).setBackground(COLORS.lightGray());
     }
 
-    applyTextColorToRange(ranges, color) {
-        Logger.log('applyTextColorToRange called with ranges: ' + ranges + ', color: ' + color);
-
-        if (Array.isArray(ranges)) {
-            ranges.forEach(range => {
-                this.sheet.getRange(range).setFontColor(color);
-            });
-        } else {
-            this.sheet.getRange(ranges).setFontColor(color);
+    applyTextColorToRange(range, color) {
+        try {
+            Logger.log('applyTextColorToRange called with range: ' + range + ', color: ' + color);
+            if (range && typeof range.getA1Notation === 'function') {
+                range.setFontColor(color);
+            } else {
+                Logger.log('Invalid range passed to applyTextColorToRange: ' + range);
+            }
+        } catch (error) {
+            Logger.log('Error applying text color to range: ' + error);
+            throw error; // rethrow to allow visibility of the error in logs
         }
+    }
+
+
+    /**
+     * Applies text colors to columns C and D in a completed row.
+     * @param {number} row - The row number to apply the colors.
+     */
+    applyCompletionTextColor(row) {
+        const rangeC = this.sheet.getRange(row, 3); // Get Range for column C
+        const rangeD = this.sheet.getRange(row, 4); // Get Range for column D
+        this.applyTextColorToRange(rangeC, COLORS.brown()); // Apply brown color to column C
+        this.applyTextColorToRange(rangeD, COLORS.blue());  // Apply blue color to column D
     }
 
     /**
      * Checks for completed rows (A to E) and applies light green background to completed rows.
-     * Incomplete rows maintain their default background colors.
+     * It also changes the text color in columns C and D if the row is complete.
      */
     applyCompletionFormatting() {
         Logger.log('applyCompletionFormatting called');
-        const range = this.sheet.getRange('A2:E45'); // Range of rows to check (A2 to E45)
+        const range = this.sheet.getRange('A2:E45');
         const values = range.getValues();
 
         for (let i = 0; i < values.length; i++) {
             const rowValues = values[i];
+            const rowNumber = i + 2;
             const isRowComplete = rowValues.every(cell => cell !== '');
 
-            const rowRange = this.sheet.getRange(i + 2, 1, 1, 5);
-
             if (isRowComplete) {
-                rowRange.setBackground(COLORS.lightGreen());
+                this.sheet.getRange(rowNumber, 1, 1, 5).setBackground(COLORS.lightGreen());
+                this.applyCompletionTextColor(rowNumber); // Apply text color to columns C and D
             } else {
-                this.applyRowBackground(i + 2);
+                this.applyRowBackground(rowNumber); // Restore the default background for incomplete rows
             }
+            // Always apply red color to column E
+            const rangeE = this.sheet.getRange(rowNumber, 5);
+            this.applyTextColorToRange(rangeE, COLORS.red());
         }
     }
-}
 
-// module.exports = { SheetService };
+}

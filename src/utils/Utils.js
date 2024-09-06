@@ -4,8 +4,12 @@ const COLORS = {
     white: () => '#ffffff',
     lightYellow: () => '#ffffe6',
     lightBlue: () => '#e6f2ff',
-    lightGreen: () => '#e6ffe6'
+    lightGreen: () => '#e6ffe6',
+    blue: () => '#0000FF',
+    brown: () => '#8B4513',
+    red: () => '#FF0000'
 };
+
 
 const COLUMN_CONFIG = [
     { column: 'A', name: 'Nom', width: 150 },
