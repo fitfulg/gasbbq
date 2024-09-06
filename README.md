@@ -1,6 +1,4 @@
-# gasbbq (v0.1.2) 
-
-<img src="./bbq-iconn.png" alt="BBQ Icon" width="100" />
+# gasbbq (v0.1.2) <img src="./bbq-iconn.png" alt="BBQ Icon" width="75" />
 
 That's how I organize barbecues via gas (Google Apps Script)
 
