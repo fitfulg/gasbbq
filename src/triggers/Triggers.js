@@ -14,5 +14,5 @@ function onEdit(e) {
 }
 
 function onChangeLanguage(languageCode) {
-    handleEvent(EventController.prototype.changeLanguage, languageCode);
+    handleEvent(EventController.prototype.handleLanguageChange, languageCode);
 }
