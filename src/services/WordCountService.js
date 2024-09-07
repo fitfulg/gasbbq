@@ -11,10 +11,16 @@ class WordCountService {
 
         const wordCount = dataValues.reduce((count, value) => {
             if (value) {
-                const words = value.toString().toLowerCase().split(/[\s,]+/);
-                words.forEach(word => {
-                    count[word] = (count[word] || 0) + 1;
-                });
+                // Removes whitespace + validates that it does not contain symbols exclusively
+                const trimmedValue = value.toString().trim();
+                // Detect if the string has at least one alphanumeric character
+                const hasAlphanumeric = /[a-zA-Z0-9]/.test(trimmedValue);
+                if (hasAlphanumeric) {
+                    const words = trimmedValue.toLowerCase().split(/[\s,]+/);
+                    words.forEach(word => {
+                        count[word] = (count[word] || 0) + 1;
+                    });
+                }
             }
             return count;
         }, {});
@@ -24,7 +30,7 @@ class WordCountService {
 
         const resultRange = this.sheet.getRange(`${targetColumn}2:${targetColumn}${sortedWordCount.length + 1}`);
         resultRange.clearContent();
-        resultRange.setValues(resultValues);  // Aquí se pasa un array 2D correctamente
+        resultRange.setValues(resultValues);
     }
 }
 // module.exports = { WordCountService };
