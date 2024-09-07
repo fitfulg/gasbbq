@@ -3,7 +3,7 @@ class SheetController {
     constructor(sheet, languageService) {
         Logger.log('SheetController constructor called');
         this.sheetService = new SheetService(sheet, languageService);
-        this.dropdownService = new DropdownService(sheet);
+        this.dropdownService = new DropdownService(sheet, languageService);
         this.protectionService = new ProtectionService(sheet);
         this.wordCountService = new WordCountService(sheet);
     }
@@ -82,6 +82,8 @@ class EventController {
         const messages = this.languageService.getAlertMessages();
         const ui = SpreadsheetApp.getUi();
         ui.alert(messages.languageChanged, messages.reloadPage, ui.ButtonSet.OK);
+
+        this.sheetController.dropdownService.applyConfirmationValidation();
     }
 }
 
@@ -220,9 +222,10 @@ class SheetService {
 
 
 class DropdownService {
-    constructor(sheet) {
+    constructor(sheet, languageService) {
         Logger.log('DropdownService  constructor called');
         this.sheet = sheet;
+        this.languageService = languageService;
     }
 
     /**
@@ -231,7 +234,12 @@ class DropdownService {
     applyConfirmationValidation() {
         Logger.log('applyConfirmationValidation called');
         const confirmRange = this.sheet.getRange('B2:B45');
-        const rule = SpreadsheetApp.newDataValidation().requireValueInList(['Sí', 'No'], true).build();
+        const dropdownOptions = this.languageService.getDropdownOptions(); // Obtener opciones traducidas
+
+        const rule = SpreadsheetApp.newDataValidation()
+            .requireValueInList(dropdownOptions, true)
+            .build();
+
         confirmRange.setDataValidation(rule);
         this.sheet.getRange('B2:B45').setBorder(true, true, true, true, true, true);
     }
@@ -366,6 +374,15 @@ class LanguageService {
         const selectedLanguage = LANGUAGES.find(lang => lang.code === this.currentLanguage);
         return selectedLanguage ? selectedLanguage.messages : { languageChanged: 'Language changed', reloadPage: 'Please reload the page to apply the changes.' };
     }
+
+    /**
+    * Returns the localized dropdown options based on the current language.
+    * @returns {Array<string>} - The dropdown options in the selected language.
+    */
+    getDropdownOptions() {
+        const selectedLanguage = LANGUAGES.find(lang => lang.code === this.currentLanguage);
+        return selectedLanguage ? selectedLanguage.dropdownOptions : ['Sí', 'No', 'NS/NR'];
+    }
 }
 
 class MenuService {
@@ -482,6 +499,7 @@ const LANGUAGES = [
         name: 'English',
         menuName: 'Language',
         headers: ['Name', 'Confirmation', 'Food Preference', 'Drink Preference', 'Allergies', 'C-counter (do not edit)', 'D-counter (do not edit)'],
+        dropdownOptions: ['Yes', 'No', 'NS/NR'],
         messages: {
             languageChanged: 'Language changed',
             reloadPage: 'Please reload the page to apply the changes.'
@@ -492,6 +510,7 @@ const LANGUAGES = [
         name: 'Castellano',
         menuName: 'Idioma',
         headers: ['Nombre', 'Confirmación', 'Preferencia de Comida', 'Preferencia de Bebida', 'Alergias', 'C-contador (no editar)', 'D-contador (no editar)'],
+        dropdownOptions: ['Sí', 'No', 'NS/NR'],
         messages: {
             languageChanged: 'Idioma cambiado',
             reloadPage: 'Por favor, recargue la página para aplicar los cambios.'
@@ -502,6 +521,7 @@ const LANGUAGES = [
         name: 'Català',
         menuName: 'Idioma',
         headers: ['Nom', 'Confirmació', 'Preferència menjars', 'Preferència begudes', 'Al·lèrgies', 'C-counter (no editar)', 'D-counter (no editar)'],
+        dropdownOptions: ['Sí', 'No', 'NS/NR'],
         messages: {
             languageChanged: 'Idioma canviat',
             reloadPage: 'Si us plau, recarregui la pàgina per aplicar els canvis.'

@@ -29,6 +29,7 @@ const LANGUAGES = [
         name: 'English',
         menuName: 'Language',
         headers: ['Name', 'Confirmation', 'Food Preference', 'Drink Preference', 'Allergies', 'C-counter (do not edit)', 'D-counter (do not edit)'],
+        dropdownOptions: ['Yes', 'No', 'NS/NR'],
         messages: {
             languageChanged: 'Language changed',
             reloadPage: 'Please reload the page to apply the changes.'
@@ -39,6 +40,7 @@ const LANGUAGES = [
         name: 'Castellano',
         menuName: 'Idioma',
         headers: ['Nombre', 'Confirmación', 'Preferencia de Comida', 'Preferencia de Bebida', 'Alergias', 'C-contador (no editar)', 'D-contador (no editar)'],
+        dropdownOptions: ['Sí', 'No', 'NS/NR'],
         messages: {
             languageChanged: 'Idioma cambiado',
             reloadPage: 'Por favor, recargue la página para aplicar los cambios.'
@@ -49,6 +51,7 @@ const LANGUAGES = [
         name: 'Català',
         menuName: 'Idioma',
         headers: ['Nom', 'Confirmació', 'Preferència menjars', 'Preferència begudes', 'Al·lèrgies', 'C-counter (no editar)', 'D-counter (no editar)'],
+        dropdownOptions: ['Sí', 'No', 'NS/NR'],
         messages: {
             languageChanged: 'Idioma canviat',
             reloadPage: 'Si us plau, recarregui la pàgina per aplicar els canvis.'

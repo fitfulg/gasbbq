@@ -75,4 +75,13 @@ class LanguageService {
         const selectedLanguage = LANGUAGES.find(lang => lang.code === this.currentLanguage);
         return selectedLanguage ? selectedLanguage.messages : { languageChanged: 'Language changed', reloadPage: 'Please reload the page to apply the changes.' };
     }
+
+    /**
+    * Returns the localized dropdown options based on the current language.
+    * @returns {Array<string>} - The dropdown options in the selected language.
+    */
+    getDropdownOptions() {
+        const selectedLanguage = LANGUAGES.find(lang => lang.code === this.currentLanguage);
+        return selectedLanguage ? selectedLanguage.dropdownOptions : ['Sí', 'No', 'NS/NR'];
+    }
 }

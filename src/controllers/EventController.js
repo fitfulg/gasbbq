@@ -52,6 +52,8 @@ class EventController {
         const messages = this.languageService.getAlertMessages();
         const ui = SpreadsheetApp.getUi();
         ui.alert(messages.languageChanged, messages.reloadPage, ui.ButtonSet.OK);
+
+        this.sheetController.dropdownService.applyConfirmationValidation();
     }
 }
 // module.exports = { EventController };
