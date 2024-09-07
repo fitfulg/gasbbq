@@ -84,4 +84,21 @@ class LanguageService {
         const selectedLanguage = LANGUAGES.find(lang => lang.code === this.currentLanguage);
         return selectedLanguage ? selectedLanguage.dropdownOptions : ['Sí', 'No', 'NS/NR'];
     }
+
+    /**
+     * Returns translations for dropdown options.
+     */
+    getDropdownTranslations() {
+        const translations = {};
+        LANGUAGES.forEach(language => {
+            language.dropdownOptions.forEach((option, index) => {
+                if (!translations[option]) {
+                    translations[option] = {};
+                }
+                translations[option][language.code] = LANGUAGES[0].dropdownOptions[index];
+            });
+        });
+
+        return translations[this.currentLanguage] || {};
+    }
 }

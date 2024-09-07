@@ -79,11 +79,12 @@ class EventController {
         Logger.log(`EventController: changeLanguage to ${languageCode}`);
         this.languageService.changeLanguage(languageCode);
 
+        this.sheetController.dropdownService.updateDropdownValues();
+        this.sheetController.dropdownService.applyConfirmationValidation();
+
         const messages = this.languageService.getAlertMessages();
         const ui = SpreadsheetApp.getUi();
         ui.alert(messages.languageChanged, messages.reloadPage, ui.ButtonSet.OK);
-
-        this.sheetController.dropdownService.applyConfirmationValidation();
     }
 }
 
@@ -243,6 +244,24 @@ class DropdownService {
         confirmRange.setDataValidation(rule);
         this.sheet.getRange('B2:B45').setBorder(true, true, true, true, true, true);
     }
+
+    /**
+    * Update existing dropdown values to match the current language.
+    */
+    updateDropdownValues() {
+        Logger.log('updateDropdownValues called');
+        const confirmRange = this.sheet.getRange('B2:B45');
+        const currentValues = confirmRange.getValues();
+        const dropdownOptions = this.languageService.getDropdownOptions();
+        const translations = this.languageService.getDropdownTranslations();
+
+        const updatedValues = currentValues.map(row => {
+            const value = row[0];
+            return [translations[value] || value];
+        });
+
+        confirmRange.setValues(updatedValues);
+    }
 }
 
 
@@ -388,6 +407,23 @@ class LanguageService {
     getDropdownOptions() {
         const selectedLanguage = LANGUAGES.find(lang => lang.code === this.currentLanguage);
         return selectedLanguage ? selectedLanguage.dropdownOptions : ['Sí', 'No', 'NS/NR'];
+    }
+
+    /**
+     * Returns translations for dropdown options.
+     */
+    getDropdownTranslations() {
+        const translations = {};
+        LANGUAGES.forEach(language => {
+            language.dropdownOptions.forEach((option, index) => {
+                if (!translations[option]) {
+                    translations[option] = {};
+                }
+                translations[option][language.code] = LANGUAGES[0].dropdownOptions[index];
+            });
+        });
+
+        return translations[this.currentLanguage] || {};
     }
 }
 
