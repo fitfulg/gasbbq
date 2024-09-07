@@ -18,17 +18,28 @@ class SheetService {
     setupHeaders() {
         Logger.log('setupHeaders called');
         const headers = this.languageService.getHeaders();
-        headers.forEach((header, index) => {
-            if (index >= 5) {
-                this.sheet.getRange(1, index + 3).setValue(header) // H is column 8 (index + 3 because index starts at 0)
-                    .setFontWeight('bold')
-                    .setBorder(true, true, true, true, true, true);
-            } else {
-                this.sheet.getRange(1, index + 1).setValue(header) // A to E
-                    .setFontWeight('bold')
-                    .setBorder(true, true, true, true, true, true);
-            }
+
+        // Explicitly clear the contents of columns F and G (TEMPORARY SOLUTION)
+        this.sheet.getRange('F1').clearContent();
+        this.sheet.getRange('G1').clearContent();
+
+        // Assign the first 5 headers to columns A to E
+        headers.slice(0, 5).forEach((header, index) => {
+            this.sheet.getRange(1, index + 1).setValue(header)
+                .setFontWeight('bold')
+                .setBorder(true, true, true, true, true, true);
         });
+
+        // Assign the last 2 headers to columns H and I
+        this.sheet.getRange('H1').setValue(headers[5]) // C-counter
+            .setFontWeight('bold')
+            .setBorder(true, true, true, true, true, true);
+
+        this.sheet.getRange('I1').setValue(headers[6]) // D-counter
+            .setFontWeight('bold')
+            .setBorder(true, true, true, true, true, true);
+
+        SpreadsheetApp.flush(); // Force changes to be written to the sheet
     }
 
     setColumnWidths() {
@@ -126,5 +137,11 @@ class SheetService {
         }
     }
 
+    clearRange(cells) {
+        Logger.log('clearRange called');
+        cells.forEach(cell => {
+            this.sheet.getRange(cell).clearContent();
+        });
+    }
 
 }

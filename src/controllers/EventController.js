@@ -47,10 +47,13 @@ class EventController {
     */
     changeLanguage(languageCode) {
         Logger.log(`EventController: changeLanguage to ${languageCode}`);
+        this.sheetController.sheetService.clearRange(['F1', 'G1']); //(TEMPORARY SOLUTION)
         this.languageService.changeLanguage(languageCode);
 
         this.sheetController.dropdownService.updateDropdownValues();
         this.sheetController.dropdownService.applyConfirmationValidation();
+
+        this.sheetController.sheetService.setupHeaders();
 
         const messages = this.languageService.getAlertMessages();
         const ui = SpreadsheetApp.getUi();
